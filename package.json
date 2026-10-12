@@ -11,11 +11,14 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@fontsource/nunito": "^5.3.0",
+    "@supabase/supabase-js": "^2.117.3",
     "nuxt": "^4.6.1",
     "vue": "^3.5.43",
     "vue-router": "^5.4.0"
   },
   "devDependencies": {
+    "@types/node": "^22.20.5",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.3.13"
   }
