@@ -42,41 +42,45 @@ const periodText = computed(() => (props.offer.period === 'year' ? 'на год'
 <style scoped>
 .success__content {
   display: flex;
-  flex: 1;
+  flex: 0 1 auto;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  min-height: 0;
 }
 
 .success__image {
-  height: 230px;
+  flex: 0 1 260px;
+  min-height: 72px;
   border-radius: 24px;
 }
 
 .success__hero {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .success__title {
-  font-size: 26px;
-  line-height: 32px;
+  font-size: 24px;
+  line-height: 30px;
   font-weight: 800;
 }
 
 .success__text {
-  font-size: 16px;
-  line-height: 22px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
   color: var(--color-text-secondary);
 }
 
 .success__details {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 16px;
+  gap: 8px;
+  padding: 14px 16px;
   border-radius: var(--radius-card);
   background: var(--color-bg);
+  box-shadow: 0 3px 0 var(--color-border);
 }
 
 .success__row {
@@ -84,8 +88,8 @@ const periodText = computed(() => (props.offer.period === 'year' ? 'на год'
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  font-size: 15px;
-  line-height: 20px;
+  font-size: 14px;
+  line-height: 18px;
 }
 
 .success__row dt {
@@ -102,7 +106,9 @@ const periodText = computed(() => (props.offer.period === 'year' ? 'на год'
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
 }
 
 .success__note {
@@ -116,11 +122,21 @@ const periodText = computed(() => (props.offer.period === 'year' ? 'на год'
 
 @media (min-width: 1024px) {
   .success__content {
-    gap: 20px;
+    flex: 1;
+    gap: 16px;
   }
 
   .success__image {
-    height: 230px;
+    flex: none;
+    height: 236px;
+  }
+
+  .success__image :deep(.game-image__img) {
+    object-position: 50% 60%;
+  }
+
+  .success__hero {
+    gap: 8px;
   }
 
   .success__title {
@@ -128,8 +144,27 @@ const periodText = computed(() => (props.offer.period === 'year' ? 'на год'
     line-height: 34px;
   }
 
+  .success__text {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 400;
+  }
+
   .success__details {
+    gap: 12px;
+    padding: 16px;
     background: var(--color-surface);
+    box-shadow: none;
+  }
+
+  .success__row {
+    font-size: 15px;
+    line-height: 20px;
+  }
+
+  .success__footer {
+    gap: 12px;
+    padding-top: 0;
   }
 }
 </style>

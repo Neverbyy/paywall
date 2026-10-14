@@ -17,20 +17,25 @@ withDefaults(defineProps<{
 .hero {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2px;
 }
 
 .hero__title {
-  font-size: 26px;
-  line-height: 32px;
+  font-size: 24px;
+  line-height: 30px;
   font-weight: 800;
   overflow-wrap: anywhere;
 }
 
 .hero__text {
-  font-size: 16px;
-  line-height: 22px;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 600;
   color: var(--color-text-secondary);
+}
+
+.hero--lg {
+  gap: 8px;
 }
 
 .hero--lg .hero__title {
@@ -41,5 +46,6 @@ withDefaults(defineProps<{
 .hero--lg .hero__text {
   font-size: 17px;
   line-height: 24px;
+  font-weight: 400;
 }
 </style>

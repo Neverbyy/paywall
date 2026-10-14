@@ -4,8 +4,9 @@
 
 <style scoped>
 .skeleton {
-  height: 84px;
-  border-radius: var(--radius-card);
+  flex: 1 1 0;
+  height: 112px;
+  border-radius: 20px;
   background: linear-gradient(
     90deg,
     var(--color-surface) 0%,
@@ -19,5 +20,12 @@
 @keyframes shimmer {
   from { background-position: 100% 0; }
   to { background-position: -100% 0; }
+}
+
+@media (min-width: 1024px) {
+  .skeleton {
+    height: 140px;
+    border-radius: 24px;
+  }
 }
 </style>

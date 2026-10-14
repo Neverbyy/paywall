@@ -16,6 +16,7 @@ withDefaults(defineProps<{
       width="348"
       height="348"
       decoding="async"
+      draggable="false"
       :loading="priority ? 'eager' : 'lazy'"
       :fetchpriority="priority ? 'high' : 'auto'"
     >
@@ -44,13 +45,13 @@ withDefaults(defineProps<{
   bottom: 10px;
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
   background: var(--color-bg);
   color: var(--color-primary);
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 18px;
+  line-height: 22px;
   font-weight: 900;
 }
 </style>

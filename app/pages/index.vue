@@ -5,10 +5,11 @@ import type { Benefit } from '~/components/paywall/PaywallBenefits.vue'
 const HERO_IMAGE = { src: '/game1.png', alt: 'Герои игры катаются на аттракционах' }
 const HERO_TITLE = 'Откройте все игры!'
 const HERO_TEXT = 'Развивающие игры для детей 3–7 лет: счёт, буквы и логика.'
+const HERO_TEXT_SHORT = 'Развивающие игры для детей 3–7 лет'
 const BENEFITS: Benefit[] = [
-  { icon: 'star', color: 'fun-orange', text: '50+ развивающих игр и заданий' },
-  { icon: 'shield', color: 'success', text: 'Без рекламы и случайных покупок' },
-  { icon: 'plane', color: 'primary', text: 'Играйте даже без интернета' },
+  { icon: 'star', color: 'fun-orange', text: '50+ развивающих игр и заданий', short: '50+ игр' },
+  { icon: 'shield', color: 'success', text: 'Без рекламы и случайных покупок', short: 'Без рекламы' },
+  { icon: 'plane', color: 'primary', text: 'Играйте даже без интернета', short: 'Без интернета' },
 ]
 
 const { data, status: offersStatus, refresh: reloadOffers } = await useFetch<OffersResponse>('/api/offers')
@@ -68,7 +69,7 @@ const onRestore = async () => {
         <PaywallGameImage class="screen__value-image" v-bind="HERO_IMAGE" age-badge="4+" />
         <div class="screen__value-body">
           <PaywallHero size="lg" :title="HERO_TITLE" :text="HERO_TEXT" />
-          <PaywallBenefits size="lg" :items="BENEFITS" />
+          <PaywallBenefits :items="BENEFITS" />
         </div>
       </aside>
 
@@ -87,8 +88,8 @@ const onRestore = async () => {
           <div class="screen__content">
             <div class="screen__intro">
               <PaywallGameImage class="screen__intro-image" v-bind="HERO_IMAGE" age-badge="4+" priority />
-              <PaywallHero :title="HERO_TITLE" :text="HERO_TEXT" />
-              <PaywallBenefits :items="BENEFITS" />
+              <PaywallHero :title="HERO_TITLE" :text="HERO_TEXT_SHORT" />
+              <PaywallBenefits variant="tiles" :items="BENEFITS" />
             </div>
 
             <div class="screen__heading">
@@ -105,41 +106,25 @@ const onRestore = async () => {
                 @action="reloadOffers()"
               />
               <div v-else-if="offersStatus === 'pending' && !offers.length" class="screen__plans" aria-busy="true">
-                <PaywallPlanCardSkeleton />
-                <PaywallPlanCardSkeleton />
+                <PaywallPlanTileSkeleton />
+                <PaywallPlanTileSkeleton />
               </div>
-              <template v-else>
-                <div
-                  class="screen__plans screen__plans--list"
-                  :class="{ 'screen__plans--locked': isBusy }"
-                  role="radiogroup"
-                  aria-label="Выберите тариф"
-                >
-                  <PaywallPlanCard
-                    v-for="offer in offers"
-                    :key="offer.id"
-                    :offer="offer"
-                    :selected="offer.id === selectedId"
-                    :disabled="isBusy"
-                    @select="selectOffer(offer.id)"
-                  />
-                </div>
-                <div
-                  class="screen__plans screen__plans--tiles"
-                  :class="{ 'screen__plans--locked': isBusy }"
-                  role="radiogroup"
-                  aria-label="Выберите тариф"
-                >
-                  <PaywallPlanTile
-                    v-for="offer in offers"
-                    :key="offer.id"
-                    :offer="offer"
-                    :selected="offer.id === selectedId"
-                    :disabled="isBusy"
-                    @select="selectOffer(offer.id)"
-                  />
-                </div>
-              </template>
+              <div
+                v-else
+                class="screen__plans"
+                :class="{ 'screen__plans--locked': isBusy }"
+                role="radiogroup"
+                aria-label="Выберите тариф"
+              >
+                <PaywallPlanTile
+                  v-for="offer in offers"
+                  :key="offer.id"
+                  :offer="offer"
+                  :selected="offer.id === selectedId"
+                  :disabled="isBusy"
+                  @select="selectOffer(offer.id)"
+                />
+              </div>
             </section>
           </div>
 
@@ -176,17 +161,17 @@ const onRestore = async () => {
 .screen {
   display: flex;
   flex-direction: column;
-  gap: 20px;
   width: 100%;
   max-width: var(--screen-max-width);
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 560px;
   margin: 0 auto;
   padding:
-    max(16px, env(safe-area-inset-top))
-    max(var(--screen-gutter), env(safe-area-inset-right))
-    max(34px, env(safe-area-inset-bottom))
-    max(var(--screen-gutter), env(safe-area-inset-left));
+    max(12px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(8px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
 }
 
 .screen__card {
@@ -203,7 +188,8 @@ const onRestore = async () => {
 }
 
 .screen__intro-image {
-  height: 190px;
+  flex: 0 1 260px;
+  min-height: 72px;
   border-radius: 24px;
 }
 
@@ -211,7 +197,8 @@ const onRestore = async () => {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
+  min-height: 0;
 }
 
 .phase-enter-active,
@@ -230,15 +217,16 @@ const onRestore = async () => {
 
 .screen__content {
   display: flex;
-  flex: 1;
+  flex: 0 1 auto;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  min-height: 0;
 }
 
 .screen__plans {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  padding-top: 10px;
   transition: opacity 0.2s ease;
 }
 
@@ -247,30 +235,13 @@ const onRestore = async () => {
   pointer-events: none;
 }
 
-.screen__plans--tiles {
-  display: none;
-}
-
 .screen__footer {
-  position: sticky;
-  bottom: max(34px, env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  background: var(--color-sky);
-  box-shadow: 0 max(34px, env(safe-area-inset-bottom)) 0 var(--color-sky);
-}
-
-.screen__footer::before {
-  content: '';
-  position: absolute;
-  right: 0;
-  bottom: 100%;
-  left: 0;
-  height: 20px;
-  background: linear-gradient(to bottom, rgb(238 247 255 / 0), var(--color-sky));
-  pointer-events: none;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
 }
 
 .screen__note {
@@ -299,9 +270,9 @@ const onRestore = async () => {
 .screen__toast {
   position: fixed;
   left: 50%;
-  bottom: calc(max(34px, env(safe-area-inset-bottom)) + 56px);
+  bottom: calc(max(8px, env(safe-area-inset-bottom)) + 120px);
   z-index: 2;
-  max-width: calc(100% - 40px);
+  max-width: calc(100% - 32px);
   padding: 10px 16px;
   border-radius: 16px;
   background: var(--color-text-primary);
@@ -328,6 +299,9 @@ const onRestore = async () => {
     display: grid;
     place-items: center;
     max-width: none;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
     padding: 32px;
     background: var(--color-sky);
   }
@@ -357,6 +331,10 @@ const onRestore = async () => {
   .screen__value-image :deep(.game-image__badge) {
     right: 16px;
     bottom: 16px;
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+    line-height: 24px;
   }
 
   .screen__value-body {
@@ -373,11 +351,11 @@ const onRestore = async () => {
   }
 
   .screen__content {
-    gap: 24px;
+    flex: 1;
+    gap: 28px;
   }
 
-  .screen__intro,
-  .screen__plans--list {
+  .screen__intro {
     display: none;
   }
 
@@ -400,19 +378,18 @@ const onRestore = async () => {
     color: var(--color-text-secondary);
   }
 
-  .screen__plans--tiles {
-    display: flex;
-    flex-direction: row;
+  .screen__plans {
+    gap: 12px;
+    padding-top: 0;
   }
 
   .screen__footer {
-    position: static;
-    background: none;
-    box-shadow: none;
+    gap: 12px;
+    padding-top: 0;
   }
 
-  .screen__footer::before {
-    display: none;
+  .screen__toast {
+    bottom: 48px;
   }
 }
 </style>
